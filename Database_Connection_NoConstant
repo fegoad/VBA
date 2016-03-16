@@ -62,7 +62,10 @@ End Sub
 Function GetSQLstring() As String
 
     Dim SQL_Query As String
-         
+    
+    'PROBLEMA: Al crear una variable para modificar el Query, dicha query no reconoce el valor y no lo cambia, es decir, mantiene el
+    'mismo texto que se ha puesto como variable en vez de devolver su valor
+     
         SQL_Query = "SELECT Tabla_Subyacente.MUREX_NAME, Tabla_Subyacente.BLOOMBERG_NAME, Tabla_Sector.SECTOR, Tabla_Trader1.Trader_1, Tabla_Trader2.Trader_2 FROM Tabla_Sector INNER JOIN (Tabla_Trader2 INNER JOIN ((Tabla_Subyacente INNER JOIN Tabla_Suby_Trader ON Tabla_Subyacente.ID_Subyacente = Tabla_Suby_Trader.ID_Subyacente) INNER JOIN Tabla_Trader1 ON Tabla_Suby_Trader.ID_Trader_1 = Tabla_Trader1.ID_Trader_1) ON Tabla_Trader2.ID_Trader_2 = Tabla_Suby_Trader.ID_Trader_2) ON Tabla_Sector.ID_Sector = Tabla_Subyacente.ID_Sector WHERE (((Tabla_Subyacente.MUREX_NAME)= 'eur-bbv.mc'));"
     
     GetSQLstring = SQL_Query
