@@ -1,3 +1,3 @@
-# hello-world
+# VBA Project
 
-this is a test
+Folder with all my VBA projects and tests
