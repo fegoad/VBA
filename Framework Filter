@@ -1,0 +1,73 @@
+Function framework(Tier, Notional, expiry)
+
+If Tier = 1 And Notional < 7000000 And expiry > 14 And expiry <= 30 Then
+framework = True
+
+ElseIf Tier = 1 And Notional < 10000000 And expiry > 30 And expiry <= 90 Then
+framework = True
+
+ElseIf Tier = 1 And Notional < 15000000 And expiry > 90 And expiry <= 180 Then
+framework = True
+
+ElseIf Tier = 1 And Notional < 15000000 And expiry > 180 And expiry <= 365 Then
+framework = True
+
+ElseIf Tier = 1 And Notional < 15000000 And expiry > 365 And expiry < 730 Then
+framework = True
+
+ElseIf Tier = 1 And Notional < 15000000 And expiry > 730 And expiry <= 1095 Then
+framework = True
+
+ElseIf Tier = 2 And Notional < 3500000 And expiry > 14 And expiry <= 30 Then
+framework = True
+
+ElseIf Tier = 2 And Notional < 6000000 And expiry > 30 And expiry <= 90 Then
+framework = True
+
+ElseIf Tier = 2 And Notional < 10000000 And expiry > 90 And expiry <= 180 Then
+framework = True
+
+ElseIf Tier = 2 And Notional < 10000000 And expiry > 180 And expiry <= 365 Then
+framework = True
+
+ElseIf Tier = 2 And Notional < 10000000 And expiry > 365 And expiry <= 730 Then
+framework = True
+
+ElseIf Tier = 3 And Notional < 1875000 And expiry > 14 And expiry <= 30 Then
+framework = True
+
+ElseIf Tier = 3 And Notional < 3750000 And expiry > 30 And expiry <= 90 Then
+framework = True
+
+ElseIf Tier = 3 And Notional < 5000000 And expiry > 90 And expiry <= 180 Then
+framework = True
+
+ElseIf Tier = 3 And Notional < 5000000 And expiry > 180 And expiry <= 365 Then
+framework = True
+
+ElseIf Tier = 3 And Notional < 5000000 And expiry > 365 And expiry <= 730 Then
+framework = True
+
+ElseIf Tier = 4 And Notional < 1250000 And expiry > 14 And expiry <= 30 Then
+framework = True
+
+ElseIf Tier = 4 And Notional < 1875000 And expiry > 30 And expiry <= 90 Then
+framework = True
+
+ElseIf Tier = 4 And Notional < 2500000 And expiry > 90 And expiry <= 180 Then
+framework = True
+
+ElseIf Tier = 4 And Notional < 3750000 And expiry > 180 And expiry <= 365 Then
+framework = True
+
+ElseIf Tier = 4 And Notional < 3750000 And expiry > 365 And expiry <= 730 Then
+framework = True
+
+
+End If
+
+
+
+
+
+End Function
