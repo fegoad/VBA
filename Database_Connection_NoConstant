@@ -1,5 +1,8 @@
 Sub copydatafromdatabase()
-
+    'To run this database it is important to activate VBAProject References
+    '   Microsoft ActiveX Data Objects 2.8 Library
+    '   Microsoft Scripting Runtime
+    
     ' Define relevant variables
    
     Dim TradersConn As ADODB.Connection
