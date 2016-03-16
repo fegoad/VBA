@@ -1,0 +1,43 @@
+Function INTERPOL(valor_buscado As Double, matriz_buscar_en As Range, matriz_resultado As Range, matriz_buscar_en_tiempo As Range) As Double
+nelementos = matriz_buscar_en.Count
+For i = 1 To nelementos - 1
+   
+    If valor_buscado >= matriz_buscar_en(i) And valor_buscado <= matriz_buscar_en(i + 1) Then
+        a = matriz_buscar_en(i)
+        b = matriz_buscar_en(i + 1)
+        m = matriz_resultado(i)
+        N = matriz_resultado(i + 1)
+        x = valor_buscado
+        INTERPOL = m + (m - N) / (a - b) * (x - a)
+        Exit Function
+    ElseIf valor_buscado <= matriz_buscar_en(i) And valor_buscado >= matriz_buscar_en(i + 1) Then
+        a = matriz_buscar_en(i)
+        b = matriz_buscar_en(i + 1)
+        m = matriz_resultado(i)
+        N = matriz_resultado(i + 1)
+        x = valor_buscado
+        INTERPOL = m + (m - N) / (a - b) * (x - a)
+        Exit Function
+     ElseIf valor_buscado <= matriz_buscar_en(i) And valor_buscado <= matriz_buscar_en(i + 1) Then
+        a = matriz_buscar_en_tiempo(i)
+        b = matriz_buscar_en_tiempo(i + 1)
+        c = matriz_buscar_en_tiempo(i + 2)
+        m = matriz_resultado(i)
+        N = matriz_resultado(i + 1)
+        INTERPOL = m + (a - b) * ((N - m) / (c - b))
+        Exit Function
+     ElseIf valor_buscado >= matriz_buscar_en(i + 4) And valor_buscado >= matriz_buscar_en(i + 5) Then
+        a = matriz_buscar_en_tiempo(i + 8)
+        b = matriz_buscar_en_tiempo(i + 6)
+        c = matriz_buscar_en_tiempo(i + 7)
+        m = matriz_resultado(i + 4)
+        N = matriz_resultado(i + 5)
+        INTERPOL = m + (a - b) * ((N - m) / (c - b))
+        Exit Function
+        
+    Else
+    End If
+
+Next
+End Function
+
