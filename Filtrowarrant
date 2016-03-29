@@ -1,0 +1,30 @@
+Sub filtrowarrant()
+
+'Ejectuar varias veces la macro hasta que no encuentre nada. Porqué no lo elimina todo a la primera.
+
+Dim micelda As Range
+Dim midate As Date
+
+'poner en la celda N1 la fecha que queremos borrar de la hoja. Eliminará todas las filas donde esté situada esa fecha.
+
+midate = Range("n1")
+
+For Each micelda In Range("h:h")
+
+      If micelda = midate Then
+      
+        micelda.Select
+        micelda.EntireRow.Delete
+        
+        
+      End If
+        
+Next micelda
+ 
+Range("a:a").CurrentRegion.EntireRow.AutoFit
+
+
+End Sub
+
+
+
