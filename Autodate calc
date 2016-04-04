@@ -1,0 +1,37 @@
+Option Explicit
+
+Private Sub CommandButton21_Click()
+
+Dim startdate As Date
+Dim enddate As Date
+Dim micelda As Range
+Dim dates As Variant
+Dim LastRow As Long
+Dim Holidays As Range
+
+'Inputs
+startdate = Range("d1").Value
+enddate = Range("d2").Value
+dates = Range("d3").Value  'Para el offset
+Set Holidays = Worksheets("Holidays").Range("a1:e12")
+
+Range("a10:r1500").Select
+Selection.ClearContents
+
+Range("a9").Value = startdate
+Range("a9").Select
+
+Do Until ActiveCell.Value = enddate
+
+    ActiveCell.Offset(1, 0) = Application.WorksheetFunction.WorkDay(ActiveCell, dates, Holidays)
+    ActiveCell.Offset(1, 0).Select
+        
+Loop
+
+LastRow = Range("a" & Rows.Count).End(xlUp).Row
+Range("b9:r9").Copy Range("b9:r" & LastRow)
+Calculate
+
+Range("a1").Select
+
+End Sub
