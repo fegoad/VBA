@@ -1,0 +1,60 @@
+Option Explicit
+        
+Sub emisionwar()
+    
+Dim ticker As String
+Dim venc As Date
+Dim strike As Double
+Dim tipo As String
+Dim found As Boolean
+   
+Dim countPE As Integer
+Dim countE As Integer
+   
+Dim fila As Integer
+Dim i As Integer
+   
+countPE = Worksheets("Propuesta_Emision").Range("countPE")
+countE = Worksheets("Emision").Range("countE")
+
+   
+Worksheets("Emision").Activate
+    
+'Guarda primera línea...
+    
+For fila = 2 To countE
+    
+ticker = Worksheets("Emision").Cells(fila, "e")
+tipo = Worksheets("Emision").Cells(fila, "i")
+strike = Worksheets("Emision").Cells(fila, "k")
+venc = Worksheets("Emision").Cells(fila, "l")
+       
+'...Busca en todas las líneas propuesta emisión // dsde i = 1 hasta 553
+i = 1
+            For i = i To countPE
+          
+            If ticker = Worksheets("Propuesta_Emision").Range("ticker").Offset(i, 0) _
+            And venc = Worksheets("Propuesta_Emision").Range("Vencimiento").Offset(i, 0) _
+            And strike = Worksheets("Propuesta_Emision").Range("Strike").Offset(i, 0) _
+            And tipo = Worksheets("Propuesta_Emision").Range("Tipo").Offset(i, 0) Then
+                   
+                found = True
+                        
+                GoTo nextloopemision
+               
+            Else
+                        
+                found = False
+            
+            End If
+    
+    
+            Next
+
+nextloopemision:
+
+Worksheets("Emision").Cells(fila, "m") = found
+
+Next
+
+End Sub
