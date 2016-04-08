@@ -1,0 +1,24 @@
+Sub CHART()
+'
+' CHART Macro
+
+A = ActiveSheet.Range("Minchart").Value
+B = ActiveSheet.Range("Minvol").Value
+    ActiveSheet.ChartObjects("Chart 3").Activate
+    ActiveChart.Axes(xlCategory).MinimumScale = A * 0.95
+    ActiveChart.Axes(xlValue).MinimumScale = B * 0.9
+    
+    ActiveSheet.Range("A14").Select
+
+    
+ActiveSheet.ChartObjects("Chart 1").Activate
+C = ActiveSheet.Range("E13").Value
+    ActiveChart.Axes(xlValue).Select
+    ActiveChart.Axes(xlValue).MinimumScale = A * 0.95
+    ActiveChart.ChartArea.Select
+    ActiveChart.Axes(xlValue, xlSecondary).Select
+    ActiveChart.Axes(xlValue, xlSecondary).MinimumScale = C * 0.95
+    Range("M7").Select
+    
+    
+End Sub
