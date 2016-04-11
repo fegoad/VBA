@@ -1,0 +1,47 @@
+Sub calculardias()
+
+Dim fila As Integer
+Dim a As Variant
+Dim b As Variant
+Dim c As Variant
+Dim s As Variant
+
+fila = 2
+s = 1
+Dim micelda As Range
+
+
+
+For Each micelda In Selection
+    
+    
+    If Cells(fila, "k") = Cells(fila - 1, "k") Then
+
+        a = Cells(fila - 1, "n")
+        c = Cells(fila, "k")
+
+        Do Until Cells(fila + s, "k") <> c
+
+        b = Cells(fila + s, "k")
+        
+        s = s + 1
+
+        Loop
+        
+    a = Cells(fila - 1, "n")
+    b = Cells(fila + s, "k")
+    Cells(fila, "n") = (b + a) / 2
+
+    Else
+
+    Cells(fila, "n") = Application.WorksheetFunction.VLookup(micelda, Range("f2:g1000"), 2, False)
+
+    End If
+    
+s = 1
+fila = fila + 1
+    
+Next
+
+
+End Sub
