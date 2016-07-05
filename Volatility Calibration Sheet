@@ -1,0 +1,209 @@
+Sub ajustarescalas()
+
+Dim Par_1 As Variant
+Dim Par_2 As Variant
+Dim Par_3 As Variant
+Dim Par_4 As Variant
+
+Dim SC1, SC2, SC3, SC4, SC5, SC6, SC7, SC8 As Variant
+
+ActiveSheet.Calculate
+
+Par_1 = Range("Par_1")
+Par_2 = Range("Par_2")
+Par_3 = Range("Par_3")
+Par_4 = Range("Par_4")
+
+
+SC1 = WorksheetFunction.Min(Par_1) - 0.005
+SC2 = WorksheetFunction.Max(Par_1) + 0.005
+
+SC3 = WorksheetFunction.Min(Par_2) - 0.005
+SC4 = WorksheetFunction.Max(Par_2) + 0.005
+
+SC5 = WorksheetFunction.Min(Par_3) - 0.005
+SC6 = WorksheetFunction.Max(Par_3) + 0.005
+
+SC7 = WorksheetFunction.Min(Par_4) - 0.005
+SC8 = WorksheetFunction.Max(Par_4) + 0.005
+
+
+
+    ActiveSheet.ChartObjects("Chart 6").Activate
+    ActiveChart.Axes(xlValue).MinimumScale = SC1
+    ActiveChart.Axes(xlValue).MaximumScale = SC2
+          
+    ActiveSheet.ChartObjects("Chart 10").Activate
+    ActiveChart.Axes(xlValue).MinimumScale = SC3
+    ActiveChart.Axes(xlValue).MaximumScale = SC4
+
+
+    ActiveSheet.ChartObjects("Chart 16").Activate
+    ActiveChart.Axes(xlValue).MinimumScale = SC5
+    ActiveChart.Axes(xlValue).MaximumScale = SC6
+    
+
+    ActiveSheet.ChartObjects("Chart 24").Activate
+    ActiveChart.Axes(xlValue).MinimumScale = SC7
+    ActiveChart.Axes(xlValue).MaximumScale = SC8
+
+'
+    ActiveSheet.Range("f4").Select
+       
+End Sub
+
+
+Sub evol_spread_all()
+
+Dim i As Integer
+Dim ds_u1 As Integer
+Dim ds_u2 As Integer
+Dim ds_u_ref As Integer
+Dim startcell As Range
+Dim maturity As Integer
+
+Dim j As Integer
+Dim LastCol As Integer
+Dim counter As Integer
+
+On Error Resume Next
+
+Dim calc_evol As Double
+
+Range("checker").Value = "Loading. . ."
+
+Application.ScreenUpdating = False
+
+counter = Worksheets("listas").Range("counter")
+
+Set startcell = Range("spread_range")
+
+startcell.CurrentRegion.ClearContents
+
+ds_u1 = Range("ds_u1")
+
+ds_u_ref = ds_u1
+Range("ds_u2") = ds_u1
+Range("ds_u_ref") = ds_u_ref
+
+
+maturity = Application.WorksheetFunction.Match(Range("vto_skew"), Range("maturities"))
+
+'Loop para calcular cada subyacente uno por uno
+For j = 0 To counter
+
+
+    Worksheets("Inicio").Range("suby_input") = Worksheets("Listas").Range("mx_tick").Offset(j, 0)
+
+        For i = 0 To ds_u_ref
+            
+            ds_u1 = i
+            ds_u2 = i
+            
+            Range("ds_u1") = ds_u1
+            Range("ds_u2") = ds_u2
+                
+            Worksheets("Inicio").Calculate
+            
+            Range("Spread_range").Offset(0, i) = Range("spread_u1u2").Offset(0, maturity)
+            Range("Spread_range").Offset(1, i) = Range("fecha_ref")
+            
+                If i = 0 Then
+                
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 2) = Range("t_x").Offset(0, 3)
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 5) = Range("t_x").Offset(0, 4)
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 8) = Range("t_x").Offset(0, 7)
+                    
+                ElseIf i = ds_u_ref Then
+                
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 3) = Range("t_x").Offset(0, 3)
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 6) = Range("t_x").Offset(0, 4)
+                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 9) = Range("t_x").Offset(0, 7)
+                
+                End If
+            
+    
+        Next
+
+    Worksheets("Inicio").Range("102:102").Copy
+    Worksheets("Spreads").Range("ini_spreads").Offset(j, 0).PasteSpecial xlValues
+    
+
+    
+'    Worksheets("Spreads").Range("ini_calibr").Offset(j, 1).PasteSpecial xlValues
+'    Worksheets("Spreads").Range("ini_calibr").Offset(j, 2).PasteSpecial xlValues
+    
+Next
+
+Range("ini_spreads").CurrentRegion.Copy
+Range("mx_tick").Offset(0, 2).PasteSpecial xlValues
+
+
+
+'Loop para calcular la diferencia entre el primer y último dato
+    j = 0
+    
+    For i = 2 To 51
+        
+        Worksheets("listas").Activate
+        calc_evol = Cells(i, Columns.Count).End(xlToLeft)
+        Worksheets("listas").Range("mx_tick").Offset(j, 1) = Worksheets("listas").Range("mx_tick").Offset(j, 2) - calc_evol
+        j = j + 1
+        
+    Next
+    
+Worksheets("Calibrada").Calculate
+Worksheets("Inicio").Activate
+
+Worksheets("Inicio").Range("checker").Value = "Done!"
+
+End Sub
+
+
+Sub evol_spread()
+
+Dim i As Integer
+Dim ds_u1 As Integer
+Dim ds_u2 As Integer
+Dim ds_u_ref As Integer
+Dim startcell As Range
+Dim maturity As Integer
+
+On Error GoTo etiqueta
+
+Application.ScreenUpdating = False
+
+Set startcell = Range("spread_range")
+
+startcell.CurrentRegion.ClearContents
+
+ds_u1 = Range("ds_u1")
+
+ds_u_ref = ds_u1
+Range("ds_u2") = ds_u1
+Range("ds_u_ref") = ds_u_ref
+
+
+maturity = Application.WorksheetFunction.Match(Range("vto_skew"), Range("maturities"))
+
+
+
+
+For i = 0 To ds_u_ref
+    
+    ds_u1 = i
+    ds_u2 = i
+    
+    Range("ds_u1") = ds_u1
+    Range("ds_u2") = ds_u2
+        
+    ActiveSheet.Calculate
+    
+    Range("Spread_range").Offset(0, i) = Range("spread_u1u2").Offset(0, maturity)
+    Range("Spread_range").Offset(1, i) = Range("fecha_ref")
+    
+etiqueta:
+Next
+
+
+End Sub
