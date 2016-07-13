@@ -1,0 +1,66 @@
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+ If Not Intersect(Target, Range("lista_to_load")) Is Nothing Then
+        ActiveSheet.Range("mx_tick").Resize(50, 1).ClearContents
+        Call load_book2
+    End If
+End Sub
+
+
+////////////////////////////
+
+
+Public Sub load_book2()
+    Dim i As Integer
+    Dim j As Integer
+    
+    Dim lastrow As Long
+    Dim lastcolumn As Long
+    Dim startcell As Range
+    Dim sht As Worksheet
+    
+    Dim nbr_max_underlyings As Integer
+    nbr_max_underlyings = 50
+    Dim book_found As Boolean
+    book_found = False
+
+    j = 0
+    Do While Sheets("Listas").Range("list_input").Offset(0, j).Value <> "" And book_found = False
+        If Sheets("Variacion_Stock_Indice").Range("lista_to_load").Value = Sheets("Listas").Range("list_input").Offset(0, j).Value Then
+            book_found = True
+            For i = 1 To nbr_max_underlyings
+                If Sheets("Listas").Range("list_input").Offset(i, j).Value <> "" Then
+
+                    Sheets("Variacion_Stock_Indice").Range("load").Offset(i, 0).Value = Sheets("Listas").Range("list_input").Offset(i, j).Value
+                Else
+                    Sheets("Variacion_Stock_Indice").Range("load").Offset(i, 0).Value = ""
+                End If
+
+            Next i
+        End If
+        j = j + 1
+    Loop
+
+    If book_found = False Then
+        MsgBox ("The book selected was not found.")
+    End If
+    
+    
+'Aquí empieza el cambio de tickers de bloomberg a murex
+    
+i = 0
+    Do While Not IsEmpty(Range("bbg_tick").Offset(i, 0))
+    
+        Range("mx_tick").Offset(i, 0) = Application.Run("bbva_MktGetMxBlgReutersName", "BLOOMBERG", "MUREX", Range("bbg_tick").Offset(i, 0), "EQ")
+      
+        i = i + 1
+         
+    Loop
+
+Worksheets("Variacion_Stock_Indice").Range("B:C").Copy
+Worksheets("Variacion_Vol_Calibrada").Range("B:C").PasteSpecial xlValues
+
+Application.CutCopyMode = False
+
+End Sub
