@@ -1,10 +1,6 @@
 Sub ajustarescalas()
 
-Dim Par_1 As Variant
-Dim Par_2 As Variant
-Dim Par_3 As Variant
-Dim Par_4 As Variant
-
+Dim Par_1, Par_2, Par_3, Par_4 As Variant
 Dim SC1, SC2, SC3, SC4, SC5, SC6, SC7, SC8 As Variant
 
 ActiveSheet.Calculate
@@ -47,7 +43,6 @@ SC8 = WorksheetFunction.Max(Par_4) + 0.005
     ActiveChart.Axes(xlValue).MinimumScale = SC7
     ActiveChart.Axes(xlValue).MaximumScale = SC8
 
-'
     ActiveSheet.Range("f4").Select
        
 End Sub
@@ -71,10 +66,13 @@ On Error Resume Next
 Dim calc_evol As Double
 
 Range("checker").Value = "Loading. . ."
+Worksheets("Spreads").Cells.ClearContents
 
-Application.ScreenUpdating = False
+Application.ScreenUpdating = True
 
-counter = Worksheets("listas").Range("counter")
+counter = Worksheets("Variacion_Stock_Indice").Range("counter")
+
+Range("counter").Calculate
 
 Set startcell = Range("spread_range")
 
@@ -93,7 +91,7 @@ maturity = Application.WorksheetFunction.Match(Range("vto_skew"), Range("maturit
 For j = 0 To counter
 
 
-    Worksheets("Inicio").Range("suby_input") = Worksheets("Listas").Range("mx_tick").Offset(j, 0)
+    Worksheets("Inicio").Range("suby_input") = Worksheets("Variacion_Stock_Indice").Range("mx_tick").Offset(j, 0)
 
         For i = 0 To ds_u_ref
             
@@ -110,49 +108,59 @@ For j = 0 To counter
             
                 If i = 0 Then
                 
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 2) = Range("t_x").Offset(0, 3)
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 5) = Range("t_x").Offset(0, 4)
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 8) = Range("t_x").Offset(0, 7)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 2) = Range("t_x").Offset(0, 3)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 5) = Range("t_x").Offset(0, 4)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 8) = Range("t_x").Offset(0, 7)
                     
                 ElseIf i = ds_u_ref Then
                 
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 3) = Range("t_x").Offset(0, 3)
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 6) = Range("t_x").Offset(0, 4)
-                    Worksheets("Calibrada").Range("mx_tick_calibr").Offset(j, 9) = Range("t_x").Offset(0, 7)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 3) = Range("t_x").Offset(0, 3)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 6) = Range("t_x").Offset(0, 4)
+                    Worksheets("Variacion_Vol_Calibrada").Range("mx_tick_calibr").Offset(j, 9) = Range("t_x").Offset(0, 7)
                 
                 End If
             
     
         Next
-
+    
+    If IsEmpty(Worksheets("spreads").Range("ini_spreads").Offset(-2, 0)) = True Then
+        
+        Worksheets("inicio").Range("103:103").Copy
+        Worksheets("spreads").Range("ini_spreads").Offset(-2, 0).PasteSpecial xlValues
+       
+    End If
+    
     Worksheets("Inicio").Range("102:102").Copy
     Worksheets("Spreads").Range("ini_spreads").Offset(j, 0).PasteSpecial xlValues
     
-
-    
-'    Worksheets("Spreads").Range("ini_calibr").Offset(j, 1).PasteSpecial xlValues
-'    Worksheets("Spreads").Range("ini_calibr").Offset(j, 2).PasteSpecial xlValues
-    
 Next
 
+'Hoja Variacion_Stock_Indice, borra antiguos valores y pega nuevos
+Worksheets("Variacion_Stock_Indice").Range("D:AA").EntireColumn.ClearContents
+Range("mx_ticker").offet(-1, 1) = "Variación"
 Range("ini_spreads").CurrentRegion.Copy
 Range("mx_tick").Offset(0, 2).PasteSpecial xlValues
+Range("ini_spreads").Offset(-2, 0).CurrentRegion.Copy
+Range("mx_tick").Offset(-1, 2).PasteSpecial xlValues
 
 
 
 'Loop para calcular la diferencia entre el primer y último dato
     j = 0
     
-    For i = 2 To 51
+    For i = 2 To counter + 1
         
-        Worksheets("listas").Activate
+        Worksheets("Variacion_Stock_Indice").Activate
         calc_evol = Cells(i, Columns.Count).End(xlToLeft)
-        Worksheets("listas").Range("mx_tick").Offset(j, 1) = Worksheets("listas").Range("mx_tick").Offset(j, 2) - calc_evol
+        Worksheets("Variacion_Stock_Indice").Range("mx_tick").Offset(j, 1) = Worksheets("Variacion_Stock_Indice").Range("mx_tick").Offset(j, 2) - calc_evol
         j = j + 1
         
     Next
     
-Worksheets("Calibrada").Calculate
+Application.CutCopyMode = False
+
+    
+Worksheets("Variacion_Vol_Calibrada").Calculate
 Worksheets("Inicio").Activate
 
 Worksheets("Inicio").Range("checker").Value = "Done!"
